@@ -56,6 +56,7 @@ def deli_or_pickup(order_data):
         delivery = int(input('Please indicate if your order is pick up or delivery: 1) Delivery 2) Pick Up: '))
         if delivery == 1:
             order_data["Delivery"] = True
+            order_data["Instructions"] = input("Please enter your delivery instructions: ")
             if total() > 30:
                 order_data["DeliveryCharge"] = 0
                 print("Your order is free or delivery charge!")
@@ -122,7 +123,9 @@ order_data = {
 customer_Data = {
     "FirstName" : "",
     "LastName" : "",
-    "Address" : "",
+    "StreetNumber" : "",
+    "StreetName" :"",
+    "Unit": "",
     "City" : "",
     "Province" : "",
     "PostalCode" : "",
@@ -139,10 +142,12 @@ print("")
 data = False
 while not data:
     
-    full_name = list(map(str,input("Please enter customer's fullname: ").split(" ")))
+    full_name = list(map(str,input("Please enter customer's full name: ").split(" ")))
     customer_Data["FirstName"] = full_name[0].strip().capitalize() #this input takes the customer's name
     customer_Data["LastName"] = full_name[-1].strip().capitalize()
-    customer_Data["Address"] = input("Please enter customer's full address: ").strip().split(" ") #this input takes the customer's street number
+    customer_Data["StreetNumber"] = input("Please enter customer's street number: ").strip().split(" ") #this input takes the customer's street number
+    customer_Data["StreetName"] = input("Please enter customer's street name: ").strip().split(" ")
+    customer_Data["Unit"] = input("Please enter customer's unit: ").strip().split(" ")
     customer_Data["City"] = input("Please enter customer's city: ").strip().capitalize() #this input takes the customer's city
     customer_Data["Province"] = input("Please enter customer's province: ").strip().capitalize() #this input takes the customer's province
     customer_Data["PostalCode"] = input("Please enter customer's postal code: ").strip() #this input takes the customer's postal code
@@ -202,16 +207,17 @@ print("") #this creates a space
 discount()
 
 print("{0} {1}." .format(customer_Data["FirstName"], customer_Data["LastName"])) #this prints the customer first and last name before the receipt
-print("{0}" .format(customer_Data["Address"])) #this print the address of the customer
-print("{0}, {1}, {2}. " .format(customer_Data["City"], customer_Data["Province"], customer_Data["PostalCode"])) #this prints the city, province and postal code of the customer
-print("{0}." .format(order_data['Delivery']) if order_data['Delivery'] ==True else"") #this prints the instructions in case of needing them
 print("{0}." .format(customer_Data["PhoneNumber"]))
+if order_data["Delivery"] == True:
+    print("{0}, {1}, {2}." .format(customer_Data["StreetNumber"], customer_Data["StreetName"], customer_Data["Unit"])) #this print the address of the customer
+    print("{0}, {1}, {2}. " .format(customer_Data["City"], customer_Data["Province"], customer_Data["PostalCode"]))
+    print("Delivery instructions" + "{0}.". format(order_data["Instructions"]))
 print(" ") #this creates an space between the customer info and the recepit
 
 print("-" *75) #this creates the format of my recepit and the first line between the information in it
 print("Order \t \t Quantity \t Item Price \t \t " " Total\t ")#this adds the headings of the recepit
 print("-" *75) #this creates the format of my recepit and the second line 
-print(("{}").format(meals_price.get(order_data['MealNumber'], {}).get("Name") + "\t" + ("{}").format(order_data["MealQuantity"]) + "\t" + "\t"+ " " + "\t" + " " + ("${:.2f}").format(order_data.get('MealPrice'))+ "\t"+ "\t" +("${:.2f}").format(total()))) #this prints the name, quantity, the price and the total
+print(("{}").format(meals_price.get(order_data['MealNumber'], {}).get("Name") + "\t" +"\t"+ ("{}").format(order_data["MealQuantity"]) + "\t" + "\t"+ " " + "\t" + " " + ("${:.2f}").format(order_data.get('MealPrice'))+ "\t"+ "\t" +("${:.2f}").format(total()))) #this prints the name, quantity, the price and the total
 print("Discount",percentage,"\t" "\t" "\t" "\t" "\t" "\t",("${:.2f}").format(applied_disc)) #this prints the percentage discounted of the order
 if order_data["Student"] == True: #if the student status is true it will print the 10% aditional discount
     print("10%" " Student savings","\t" "\t" "\t"  "\t", " ", " ", " ", ("- ${:.2f}").format(applied_student_disc))  #if the student status is true it will print the 10% aditional discount
