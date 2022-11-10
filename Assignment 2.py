@@ -1,8 +1,8 @@
 # Name: Arnold Store II.py
 # Author: Estalin Peña
 # Date Created: November 07, 2022
-# Date Last Modified: November 09, 2022
-# Purpose: To take the order of the clients, ask whether is pick up or delivery and print the receipt.
+# Date Last Modified: November 10, 2022
+# Purpose: To take the order of the client, ask whether is pick up or delivery and print the receipt.
 
 
 
@@ -11,7 +11,7 @@
 def total(): #This funcion calculates the total of price and meal quantity
     return float(order_data['MealQuantity']) * float(order_data['MealPrice'])
 
-def subtotal(): #this function sets a list to print the subtotal
+def subtotal(): #this function calculates and print the subtotal
     print(float(order_data['MealPrice']) * float(order_data['MealQuantity'] - discount()))
 
 
@@ -50,9 +50,9 @@ def discount(): #this function calculates all the discounts and returns the perc
             total_w_disc *= student_discount
         return total_w_disc
 
-def deli_or_pickup(order_data):
+def deli_or_pickup(order_data): #This function calculates wheter the order will be delivered or pick up and calculates the delivery fee.
     delivery = 0
-    while delivery not in range(1,2):
+    while delivery not in range(1,2):# This while evaluates that the answer for choosing delivery is either 1 or 2. And displays a message if the wrong input is entered
         delivery = int(input('Please indicate if your order is pick up or delivery: 1) Delivery 2) Pick Up: '))
         if delivery == 1:
             order_data["Delivery"] = True
@@ -71,7 +71,7 @@ def deli_or_pickup(order_data):
         else:
             print("Please write 1 or 2 only! ")
     
-def tips(order_data):
+def tips(order_data): #this function calculates the tips and evaluates the input. Also displays a message in case the information typed is incorrect
     tip = 0
     while tip not in range(1,3):
         tip = int(input('Please select your tip: 1) 10% 2) 15% 3) 20%: '))
@@ -86,7 +86,7 @@ def tips(order_data):
 
 
 
-
+#This dictionario stores the Id, name and price of the meals.
 meals_price = {
     "1" : {
         "Name" : "Poutine",
@@ -107,7 +107,7 @@ meals_price = {
         "Name" : "Chicken Salad",
         "Price" : 12.99, }
     }   
-
+#this dictionary stores the order data.
 order_data = {
     'MealNumber' : "",
     'MealQuantity': "",
@@ -120,6 +120,7 @@ order_data = {
     'DeliveryCharge': 0.00,
     'Tips': " "}
 
+#this dictionary stores all the customer data.
 customer_Data = {
     "FirstName" : "",
     "LastName" : "",
@@ -139,7 +140,8 @@ print(" ")
 print("Welcome to Arnold's Amazing Eats II!") #this welcomes the client to the store
 print("")
 
-data = False
+
+data = False #variable to set the input data false to enter a while and verify its content.
 while not data:
     
     full_name = list(map(str,input("Please enter customer's full name: ").split(" ")))
@@ -153,37 +155,39 @@ while not data:
     customer_Data["PostalCode"] = input("Please enter customer's postal code: ").strip() #this input takes the customer's postal code
     customer_Data["PhoneNumber"] = input("Please enter customer's phone number: ").strip() #this input takes the customer's phone number
      
-    for key in customer_Data:
+    for key in customer_Data: #this for iterates the while dictionary and evaluates that all the fields are filled.
         if customer_Data[key] == "":
             print("All fields are mandatory!")
             break
         else:
             data = True
 
+#this while evaluates the order, in case the customer wants to start over.
 while True:
     print(" ") 
     print("What do you wish to order?")
     print(" ")
 
-    for key in meals_price.keys():
+    for key in meals_price.keys():#this loop iterates and organises the ID, food name and price and displays it to the customer.
         print(key, meals_price.get(key, {}).get("Name"), meals_price.get(key,{}).get("Price") )
             
     print(" ") #this creates a speace between the order and the menu
 
-    order_data['MealNumber'] = input("Please select your food: " )
+    order_data['MealNumber'] = input("Please select your food: " )#food selection
     while not((int(order_data['MealNumber']) >= 1) and (int(order_data['MealNumber']) <= 6)): 
                     order_data['MealNumber'] = str(input("Please select a valid option: ")).strip()
 
-    order_data['MealQuantity'] = input("Please enter the quantity: ").strip()
+    order_data['MealQuantity'] = input("Please enter the quantity: ").strip()# quantitiy of the good
     print(order_data['MealQuantity'] + " " + meals_price.get(order_data['MealNumber'], {}).get("Name"))
     confirmation = input("Please confirm your order [Yes/No]: ") #this confirms the order
-    if confirmation.upper().strip() == "NO" or confirmation.upper().strip() == "N":
+    if confirmation.upper().strip() == "NO" or confirmation.upper().strip() == "N":#this evaluates the confirmation of the food
             continue
     elif confirmation.upper().strip() == "YES" or confirmation.upper().strip() =="Y":
             break
 order_data['MealPrice'] = meals_price.get(order_data['MealNumber'], {}).get("Price")
+
 correct_letter = False
-while correct_letter == False:
+while correct_letter == False:#this evaluates the answer if the customer is a student or no
     student_confirmation = input("Are you a student? [Y/N] ") #this asks if the customer is a student or no
     
     if student_confirmation.upper() == "YES" or student_confirmation.upper() == "Y": #this confirms if the customer is a student or no
@@ -198,20 +202,20 @@ while correct_letter == False:
         print("Please only enter Y or N")
 
 
-deli_or_pickup(order_data)
+deli_or_pickup(order_data)#calling the function to evaluate the delivery or pick up
 
 
 
 print("") #this creates a space 
 print("") #this creates a space
-discount()
+discount()#calling the discount function
 
 print("{0} {1}." .format(customer_Data["FirstName"], customer_Data["LastName"])) #this prints the customer first and last name before the receipt
-print("{0}." .format(customer_Data["PhoneNumber"]))
-if order_data["Delivery"] == True:
+print("{0}." .format(customer_Data["PhoneNumber"]))#prints the customer phone number
+if order_data["Delivery"] == True:#if delivery is true it prints the customer address.
     print("{0}, {1}, {2}." .format(customer_Data["StreetNumber"], customer_Data["StreetName"], customer_Data["Unit"])) #this print the address of the customer
-    print("{0}, {1}, {2}. " .format(customer_Data["City"], customer_Data["Province"], customer_Data["PostalCode"]))
-    print("Delivery instructions" + "{0}.". format(order_data["Instructions"]))
+    print("{0}, {1}, {2}. " .format(customer_Data["City"], customer_Data["Province"], customer_Data["PostalCode"]))#this print the address of the customer
+    print("Delivery instructions" + "{0}.". format(order_data["Instructions"]))# if delivery is true it prints the delivery instructions
 print(" ") #this creates an space between the customer info and the recepit
 
 print("-" *75) #this creates the format of my recepit and the first line between the information in it
@@ -223,10 +227,10 @@ if order_data["Student"] == True: #if the student status is true it will print t
     print("10%" " Student savings","\t" "\t" "\t"  "\t", " ", " ", " ", ("- ${:.2f}").format(applied_student_disc))  #if the student status is true it will print the 10% aditional discount
 print("\t" "\t" "\t" "\t","Subtotal" ," ", "\t", "\t", ("${:.2f}").format(discount())) #this prints the subtotal of the recepit
 print("\t" "\t" "\t" "\t", "HST 13% ","\t" "\t",("${:.2f}").format(discount() * .13)) #this prints the tax
-if order_data['Delivery'] == True:
+if order_data['Delivery'] == True:#If deliver is true it prints the deliver fee and tips along with the grand total
     print("\t" "\t" "\t" "\t" " " "Delivery Fee",  " \t"  "\t", ("${:.2f}").format(order_data['DeliveryCharge']) )
     print("\t" "\t" "\t" "\t" " " "Tips",  " \t" "\t" "\t", ("${:.2f}").format(order_data['Tips']))
     print("\t" "\t" "\t" "\t" " " "Grand Total",  " \t"  "\t", ("${:.2f}").format(discount() * 1.13 + order_data["DeliveryCharge"] + float(order_data["Tips"]), "CAD")) #this prints the grand total of the recepit
-else:
+else:#prints the grand total without delivery fee and tips.
      print("\t" "\t" "\t" "\t" " " "Grand Total",  " \t"  "\t", ("${:.2f}").format(discount() * 1.13))
 print("-" *75) #this creates the format of my recepit and is the last line 
