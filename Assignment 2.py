@@ -1,4 +1,3 @@
-# Name: Arnold Store II.py
 # Author: Estalin Peña
 # Date Created: November 07, 2022
 # Date Last Modified: November 10, 2022
@@ -12,7 +11,7 @@ def total(): #This funcion calculates the total of price and meal quantity
     return float(order_data['MealQuantity']) * float(order_data['MealPrice'])
 
 def subtotal(): #this function calculates and print the subtotal
-    print(float(order_data['MealPrice']) * float(order_data['MealQuantity'] - discount()))
+    print(float(order_data["Price"]) * float(order_data["Quantity"] - discount()))
 
 
 
